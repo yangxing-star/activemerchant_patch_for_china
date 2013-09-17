@@ -1,3 +1,4 @@
+require 'cgi'
 require 'digest/md5'
 
 module ActiveMerchant #:nodoc:
@@ -9,11 +10,18 @@ module ActiveMerchant #:nodoc:
           mapping :account, 'partner'
           mapping :amount, 'total_fee'
 
-          mapping :order, 'sp_billno'
+          mapping :order, 'out_trade_no'
 
           mapping :cmdno, 'cmdno'
           mapping :return_url, 'return_url'
-          mapping :description, 'desc'
+
+          mapping :body, 'body'
+          mapping :subject, 'subject'
+          mapping :charset, 'input_charset'
+
+          mapping :notify_url, 'notify_url'
+          mapping :return_url, 'return_url'
+          
           mapping :attach, 'attach'
           mapping :date, 'date'
           mapping :currency, 'fee_type'
@@ -21,15 +29,15 @@ module ActiveMerchant #:nodoc:
 
           def initialize(order, account, options = {})
             super
-            add_field('bank_type', 0)
+            add_field('bank_type', 'DEFAULT')
           end
 
           def sign
             add_field('sign',
-                      Digest::MD5.hexdigest("cmdno=#{cmdno}&date=#{date}&partner=#{account}" +
-                      "&transaction_id=#{transaction_id}&sp_billno=#{order}&total_fee=#{amount}" +
-                      "&fee_type=#{currency}&return_url=#{return_url}&attach=#{attach}&key=#{KEY}"))
+                      Digest::MD5.hexdigest((@fields.sort.collect{|s|s[0]+"="+CGI.unescape(s[1])}).join("&")+KEY)
+                     )
             add_field('sign_type', 'MD5')
+            nil
           end
 
         end
