@@ -6,7 +6,7 @@ module ActiveMerchant #:nodoc:
       module Tenpay
         class Helper < ActiveMerchant::Billing::Integrations::Helper
           # Replace with the real mapping
-          mapping :account, 'bargainor_id'
+          mapping :account, 'partner'
           mapping :amount, 'total_fee'
 
           mapping :order, 'sp_billno'
@@ -26,7 +26,7 @@ module ActiveMerchant #:nodoc:
 
           def sign
             add_field('sign',
-                      Digest::MD5.hexdigest("cmdno=#{cmdno}&date=#{date}&bargainor_id=#{account}" +
+                      Digest::MD5.hexdigest("cmdno=#{cmdno}&date=#{date}&partner=#{account}" +
                       "&transaction_id=#{transaction_id}&sp_billno=#{order}&total_fee=#{amount}" +
                       "&fee_type=#{currency}&return_url=#{return_url}&attach=#{attach}&key=#{KEY}"))
             add_field('sign_type', 'MD5')
