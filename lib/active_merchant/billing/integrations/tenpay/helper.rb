@@ -18,6 +18,7 @@ module ActiveMerchant #:nodoc:
           mapping :body, 'body'
           mapping :subject, 'subject'
           mapping :charset, 'input_charset'
+          mapping :clent_ip, 'spbill_create_ip'
 
           mapping :notify_url, 'notify_url'
           mapping :return_url, 'return_url'
@@ -34,7 +35,7 @@ module ActiveMerchant #:nodoc:
 
           def sign
             add_field('sign',
-                      Digest::MD5.hexdigest((@fields.sort.collect{|s|s[0]+"="+CGI.unescape(s[1])}).join("&")+KEY)
+                      Digest::MD5.hexdigest((@fields.sort.collect{|s|s[0]+"="+s[1]}).join("&")+KEY)
                      )
             add_field('sign_type', 'MD5')
             nil
