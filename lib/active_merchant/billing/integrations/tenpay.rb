@@ -7,7 +7,7 @@ module ActiveMerchant #:nodoc:
       module Tenpay
 
         mattr_accessor :service_url
-        self.service_url = 'https://gw.tenpay.com/gateway/pay.htm'
+        self.service_url = 'https://www.tenpay.com/cgi-bin/v1.0/pay_gate.cgi'
 
         def self.return(query_string)
           Return.new(query_string)
