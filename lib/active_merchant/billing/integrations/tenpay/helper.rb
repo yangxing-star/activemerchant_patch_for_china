@@ -1,4 +1,3 @@
-require 'cgi'
 require 'digest/md5'
 
 module ActiveMerchant #:nodoc:
@@ -7,38 +6,31 @@ module ActiveMerchant #:nodoc:
       module Tenpay
         class Helper < ActiveMerchant::Billing::Integrations::Helper
           # Replace with the real mapping
-          mapping :account, 'partner'
+          mapping :account, 'bargainor_id'
           mapping :amount, 'total_fee'
 
-          mapping :order, 'out_trade_no'
+          mapping :order, 'sp_billno'
 
           mapping :cmdno, 'cmdno'
           mapping :return_url, 'return_url'
-
-          mapping :body, 'body'
-          mapping :subject, 'subject'
-          mapping :charset, 'input_charset'
-          mapping :clent_ip, 'spbill_create_ip'
-
-          mapping :notify_url, 'notify_url'
-          mapping :return_url, 'return_url'
-          
+          mapping :description, 'desc'
           mapping :attach, 'attach'
           mapping :date, 'date'
           mapping :currency, 'fee_type'
           mapping :transaction_id, 'transaction_id'
+          mapping :spbill_create_ip, 'spbill_create_ip'
+          mapping :input_charset, 'input_charset'
 
           def initialize(order, account, options = {})
             super
-            add_field('bank_type', 'DEFAULT')
           end
 
           def sign
             add_field('sign',
-                      Digest::MD5.hexdigest((@fields.sort.collect{|s|s[0]+"="+s[1]}).join("&")+KEY)
-                     )
-            add_field('sign_type', 'MD5')
-            nil
+                      Digest::MD5.hexdigest("cmdno=#{cmdno}&date=#{date}&bargainor_id=#{account}" +
+                      "&transaction_id=#{transaction_id}&sp_billno=#{order}&total_fee=#{amount}" +
+                      "&fee_type=#{currency}&return_url=#{return_url}&attach=#{attach}" +
+                      "&spbill_create_ip=#{spbill_create_ip}&key=#{KEY}").upcase)
           end
 
         end
