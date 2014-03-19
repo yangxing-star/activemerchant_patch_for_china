@@ -13,6 +13,7 @@ module ActiveMerchant #:nodoc:
 
           mapping :cmdno, 'cmdno'
           mapping :return_url, 'return_url'
+          mapping :notify_url, 'notify_url'
           mapping :description, 'desc'
           mapping :attach, 'attach'
           mapping :date, 'date'
@@ -30,7 +31,7 @@ module ActiveMerchant #:nodoc:
                       Digest::MD5.hexdigest("cmdno=#{cmdno}&date=#{date}&bargainor_id=#{account}" +
                       "&transaction_id=#{transaction_id}&sp_billno=#{order}&total_fee=#{amount}" +
                       "&fee_type=#{currency}&return_url=#{return_url}&attach=#{attach}" +
-                      "&spbill_create_ip=#{spbill_create_ip}&key=#{KEY}").upcase)
+                      "&notify_url=#{notify_url}&spbill_create_ip=#{spbill_create_ip}&key=#{KEY}").upcase)
           end
 
         end
