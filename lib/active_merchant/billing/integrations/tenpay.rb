@@ -1,5 +1,6 @@
 require File.dirname(__FILE__) + '/tenpay/helper.rb'
 require File.dirname(__FILE__) + '/tenpay/return.rb'
+require File.dirname(__FILE__) + '/tenpay/notification.rb'
 
 module ActiveMerchant #:nodoc:
   module Billing #:nodoc:
