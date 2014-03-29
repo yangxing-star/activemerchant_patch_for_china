@@ -23,8 +23,11 @@ module ActiveMerchant #:nodoc:
 
           def sign
             puts "-"*80
-            puts account
-            puts KEY
+            puts "attach=#{attach}&body=#{body}" +
+                      "&input_charset=#{input_charset}&notify_url=#{notify_url}" +
+                      "&out_trade_no=#{order}&partner=#{account}" + 
+                      "&return_url=#{return_url}&spbill_create_ip=#{spbill_create_ip}" +
+                      "&total_fee=#{amount}&transaction_id=#{transaction_id}&key=#{KEY}"
             puts "-"*80
             add_field('sign',
                       Digest::MD5.hexdigest("attach=#{attach}&body=#{body}" +
