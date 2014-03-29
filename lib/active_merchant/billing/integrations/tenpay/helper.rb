@@ -22,6 +22,10 @@ module ActiveMerchant #:nodoc:
           end
 
           def sign
+            puts "-"*80
+            puts account
+            puts KEY
+            puts "-"*80
             add_field('sign',
                       Digest::MD5.hexdigest("attach=#{attach}&body=#{body}" +
                       "&input_charset=#{input_charset}&notify_url=#{notify_url}" +
