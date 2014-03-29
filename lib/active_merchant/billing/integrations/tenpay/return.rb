@@ -7,11 +7,11 @@ module ActiveMerchant #:nodoc:
         class Return < ActiveMerchant::Billing::Integrations::Return
 
           def account
-            @params["bargainor_id"]
+            @params["partner"]
           end
 
           def order
-            @params["sp_billno"]
+            @params["out_trade_no"]
           end
 
           def amount
@@ -19,26 +19,16 @@ module ActiveMerchant #:nodoc:
           end
 
           def success?
-            return false unless @params["pay_info"] == "OK" && @params["pay_result"] == "0"
+            return false unless @params["trade_state"] == "0"
             unless account == ACCOUNT
               @message = "Tenpay Error: INCORRECT_ACCOUNT"
               return false
             end
-
-            hash_keys = %w(cmdno pay_result date transaction_id sp_billno total_fee fee_type attach)
-
-            md5_string = hash_keys.inject([]){|array, key| array << "#{key}=#{@params[key]}"}.join("&")
-
-            unless Digest::MD5.hexdigest(md5_string+"&key=#{KEY}") == @params["sign"].downcase
-              @message = "Tenpay Error: ILLEGAL_SIGN"
-              return false
-            end
-
             return true
           end
 
           def message
-            @message || @params['pay_info']
+            @message
           end
 
         end
